@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-green
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+      version: green
+  template:
+    metadata:
+      labels:
+        app: nginx
+        version: green
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.20
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: html
+        configMap:
+          name: nginx-html
